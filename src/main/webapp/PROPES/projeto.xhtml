@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:panel id="pnlProjetos"  visible="#{ViewControladorMB.projetos}" style="width: 55%; background: top;">
+        <f:facet name="header" >
+            <h:outputLabel value="Novo Projeto"/>
+            <p:commandLink action="#{ViewControladorMB.exibirListarProjetos()}" rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}"
+                           update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos" 
+                           style="float: right">
+                <img src="../resources/images/back.png" width="16" height="16" alt="back"/>
+            </p:commandLink>
+            <p:commandLink action="#{ViewControladorMB.exibirMeusProjetos()}" rendered="#{sessionScope.tipo eq '2'}"
+                           update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos" 
+                           style="float: right">
+                <img src="../resources/images/back.png" width="16" height="16" alt="back"/>
+            </p:commandLink>
+        </f:facet>
+        <h:form id="formCadastrarProjeto" prependId="false" 
+                enctype="multipart/form-data" 
+                acceptcharset="ISO-8859-1">
+            <h:panelGrid columns="5">
+                <p:outputLabel value="Convênio:"/>
+                <p:selectOneButton value="#{ProjetoPropesMB.convenio}">
+                    <f:selectItem itemLabel="Sim" itemValue="true"/>
+                    <f:selectItem itemLabel="Não" itemValue="false"/>
+                    <p:ajax event="change" listener="#{ViewControladorMB.exibirInstituicaoConveniada(e)}" 
+                            update="@form"/>
+                </p:selectOneButton>
+                <p:spacer width="20"/>
+                <p:outputLabel value="Instituição Conveniada:" rendered="#{ViewControladorMB.instituicaoConveniada}"/>
+                <p:selectOneMenu value="#{ProjetoPropesMB.instituicaoConveniada}" rendered="#{ViewControladorMB.instituicaoConveniada}"
+                                 filter="true" filterMatchMode="contains" style="width: 300px">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{InstituicaoPropesMB.instituicoes}" var="instituicao" 
+                                   itemLabel="#{instituicao.descricao}" itemValue="#{instituicao.id}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <h:panelGrid columns="6">
+                <p:outputLabel value="Fomento:"/>
+                <p:selectOneButton value="#{ProjetoPropesMB.fomento}">
+                    <f:selectItem itemLabel="Sim" itemValue="true"/>
+                    <f:selectItem itemLabel="Não" itemValue="false"/>
+                    <p:ajax event="change" listener="#{ViewControladorMB.exibirFomento(e)}" 
+                            update="@form"/>
+                </p:selectOneButton>
+                <p:outputLabel value="Fomentador:" rendered="#{ViewControladorMB.fomento}"/>
+                <p:selectOneMenu value="#{ProjetoPropesMB.fomentador}" rendered="#{ViewControladorMB.fomento}" style="width: 100px">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{FomentadorPropesMB.fomentadores}" var="fomentador" 
+                                   itemLabel="#{fomentador.descricao}" itemValue="#{fomentador.id}"/>
+                </p:selectOneMenu> 
+                <p:outputLabel value="Valor do Fomento:" rendered="#{ViewControladorMB.fomento}"/>
+                <p:inputText value="#{ProjetoPropesMB.valorFomento}" rendered="#{ViewControladorMB.fomento}" style="width: 50px"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Título do Projeto: "/>
+                <p:inputText style="width: 400px; text-transform: uppercase" value="#{ProjetoPropesMB.projeto.titulo}" 
+                             required="true" requiredMessage="Insira o nome do Projeto!"/>
+                <p:outputLabel value="Responsável: "/>
+                <p:outputLabel value="#{sessionScope.nome_usuario}" style="font-weight: bold; font-style: italic"/>
+                <p:outputLabel value="Modalidade:"/>
+                <p:selectOneMenu value="#{ProjetoPropesMB.modalidade}">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{ModalidadePropesMB.modalidades}" var="modalidade" 
+                                   itemLabel="#{modalidade.descricao}" itemValue="#{modalidade.id}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Curso:"/>
+                <p:selectOneMenu value="#{ProjetoPropesMB.curso}" filter="true" filterMatchMode="startsWith" rendered="#{sessionScope.curso_id == 0}">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{CursoPropesMB.cursos}" var="curso" 
+                                   itemLabel="#{curso.descricao}" itemValue="#{curso.id}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="#{sessionScope.curso}" rendered="#{sessionScope.curso_id != 0}" style="font-weight: bold; font-style: italic"/>
+                <p:outputLabel value="Resumo:"/>
+                <p:inputTextarea style="width: 450px; text-transform: uppercase" 
+                                 maxlength="1200" counter="display" 
+                                 counterTemplate="{0} caracteres restantes."
+                                 value="#{ProjetoPropesMB.projeto.resumo}"/>
+                <p:outputLabel/>
+                <p:outputLabel id="display" style="font-weight: bold"/>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Arquivo em PDF: "/>
+                <p:fileUpload mode="simple" skinSimple="true" label="Selecionar Arquivo" value="#{ProjetoPropesMB.arquivoProjeto}"/>
+                <p:outputLabel value="Termo Resp(PDF): "/>
+                <p:fileUpload mode="simple" skinSimple="true" label="Selecionar Arquivo" value="#{ProjetoPropesMB.arquivoTermo}"/>
+            </h:panelGrid>
+            <br/>
+            <center>
+                <p:commandButton id="cbProjeto" value="Adicionar" ajax="false" action="#{ProjetoPropesMB.adicionar}" 
+                                 onclick="PF('blockUI_p').show();" onsuccess="PF('blockUI_p').hide();"/>
+            </center>
+        </h:form>
+    </p:panel>
+
+    <p:blockUI block=":pnlProjetos" widgetVar="blockUiProjetos">  
+        Finalizando cadastro do Projeto...<br/>  
+        <p:graphicImage library="images" name="carregando.gif"/> 
+    </p:blockUI>
+
+</html>
+

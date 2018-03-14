@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:panel id="pnlRelacaoProjetoPesquisador" visible="#{ViewControladorMB.relacaoProjetoPesquisador}" style="width: 65%; background: top;">
+        <h:form>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Aluno/Pesquisador: "/>
+                <p:selectOneMenu value="#{RelatorioPropesMB.idAlunoPesquisador}" 
+                                 filter="true"
+                                 filterMatchMode="startsWith">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{UsuarioPropesMB.alunosPesquisadores}" var="pesquisador" itemLabel="#{pesquisador.nome}" itemValue="#{pesquisador.id}"/>
+                    <p:ajax listener="#{RelatorioPropesMB.addAlunoPesquisador(e)}" update=":fsRelacaoProjetosPesquisa" immediate="true"/>
+                    <p:ajax listener="#{RelatorioPropesMB.exibirDadosRelacao(e)}" update=":oplAlunoPesquisador :oplTotalConvenios :oplTotalFomento"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+        </h:form>
+        <h:form prependId="false">
+            <h:panelGrid columns="2" style="float: right">
+                <p:commandLink>
+                    <p:graphicImage library="images" name="printer.png" height="32" width="32" title="Imprimir/Salva PDF"/>
+                    <p:printer target="fsRelacaoProjetosPesquisa"/>
+                </p:commandLink>
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <br/>
+        <p:fieldset id="fsRelacaoProjetosPesquisa" legend="Plataforma Integrada de Projetos de Pesquisa" toggleSpeed="500">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Relação Projetos por Pesquisador - "/>
+                <p:outputLabel value="#{ViewControladorMB.dataAtual}">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:00"/>
+                </p:outputLabel>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Aluno/Pesquisador: "/>
+                <p:outputLabel id="oplAlunoPesquisador" value="#{RelatorioPropesMB.nomeAlunoPesquisador}"/>
+            </h:panelGrid>
+            <br/>
+            <p:dataTable id="dtProjetosDeAluno" value="#{RelatorioPropesMB.projetosDeAluno}" var="projeto" 
+                         emptyMessage="Nenhum Projeto Encontrado." rowIndexVar="row">
+                <p:column style="width: 15px">
+                    #{row+1}
+                </p:column>
+                <p:column headerText="Nº" width="20" filterStyle="width: 30px">
+                    #{projeto.id}
+                </p:column>
+                <p:column headerText="Título">
+                    #{projeto.titulo}
+                </p:column>
+                <p:column headerText="Modalidade">
+                    #{projeto.modalidade.descricao}
+                </p:column>
+                <p:column headerText="Convênio">
+                    <p:outputLabel value="#{projeto.instituicaoConvenio.descricao}" rendered="#{projeto.instituicaoConvenio.descricao != null}"/>
+                    <p:outputLabel value="-----" style="font-weight: bold" rendered="#{projeto.instituicaoConvenio.descricao eq null}"/>
+                </p:column>
+                <p:column headerText="Fomento" width="50">
+                    <p:outputLabel value="#{projeto.valorFomento}" rendered="#{projeto.valorFomento != null}"/>
+                    <p:outputLabel value="-----" style="font-weight: bold" rendered="#{projeto.valorFomento eq null}"/>
+                </p:column>
+            </p:dataTable>
+            <br/>
+            <br/>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Total de Convênios: "/>
+                <p:outputLabel id="oplTotalConvenios" value="#{RelatorioPropesMB.totalConvenios}"/>
+                <p:outputLabel value="Total em Fomento R$: "/>
+                <p:outputLabel id="oplTotalFomento" value="#{RelatorioPropesMB.totalFomento}"/>
+            </h:panelGrid>
+            <p:separator/>
+
+            <center>
+                <p:outputLabel value="Pró-Reitoria de Pós-Graduação e Pesquisa - PROPES"/><br/>
+                <p:outputLabel value="Universidade"/><br/>
+                <p:outputLabel value="Endereço da Universidade"/>
+            </center>
+        </p:fieldset>
+    </p:panel>
+</html>
+

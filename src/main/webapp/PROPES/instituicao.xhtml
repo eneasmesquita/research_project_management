@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog header="Nova Instituicao" widgetVar="wgtVarDlgInstituicao" 
+              showEffect="fade" hideEffect="fade" resizable="false" width="400" modal="true">
+        <h:form id="formNovaInstituicao" prependId="false">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Descrição: "/>
+                <p:inputText value="#{InstituicaoPropesMB.instituicao.descricao}" 
+                             required="true" requiredMessage="Insira a descrição da instituicao a ser cadastrado."
+                             style="text-transform: uppercase;"/>
+                <p:commandButton action="#{InstituicaoPropesMB.adicionar()}" 
+                                 update="@form :formDtInstituicao :growl" value="Adicionar"/>
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <h:form id="formDtInstituicao" prependId="false">
+            <p:dataTable id="dtNovaInstituicao" value="#{InstituicaoPropesMB.instituicoes}" var="instituicao" rowIndexVar="idx"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="10" emptyMessage="Nenhuma Instituicao Encontrada." 
+                         rowStyleClass="#{empty idx or idx mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Instituicao" filterBy="#{instituicao.descricao}" 
+                          filterMatchMode="contains" filterStyleClass="filtragemColunas">
+                    #{instituicao.descricao}     
+                </p:column>
+                <p:column width="25">
+                    <p:commandButton icon="ui-icon-trash" action="#{InstituicaoPropesMB.excluir()}" 
+                                     update="@form :growl">
+                        <f:setPropertyActionListener value="#{instituicao}" target="#{InstituicaoPropesMB.instituicao}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+</html>
+

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog header="Nova Modalidade" widgetVar="wgtVarDlgModalidade" 
+              showEffect="fade" hideEffect="fade" resizable="false" width="400" modal="true">
+        <h:form id="formNovaModalidade" prependId="false">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Descrição: "/>
+                <p:inputText value="#{ModalidadePropesMB.modalidade.descricao}" 
+                             required="true" requiredMessage="Insira a descrição do modalidade a ser cadastrado."
+                             style="text-transform: uppercase; width: 200px"/>
+                <p:outputLabel value="Período:"/>
+                <p:selectOneMenu value="#{ModalidadePropesMB.periodo}" 
+                                 required="true" 
+                                 requiredMessage="Informe o período da modalidade do projeto!">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{ModalidadePropesMB.periodos}" var="periodo" 
+                                   itemLabel="#{periodo.meses} meses" itemValue="#{periodo.id}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:separator/>
+            <center>
+                <p:commandButton action="#{ModalidadePropesMB.adicionar()}" 
+                                 update="@form :formDtModalidade :growl" value="Adicionar"/>
+            </center>
+        </h:form>
+        <br/>
+        <h:form id="formDtModalidade" prependId="false">
+            <p:dataTable id="dtNovaModalidade" value="#{ModalidadePropesMB.modalidades}" var="modalidade" rowIndexVar="idx"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="10" emptyMessage="Nenhuma Modalidade Encontrada.">
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Modalidade" filterBy="#{modalidade.descricao}" 
+                          filterMatchMode="contains" filterStyleClass="filtragemColunas">
+                    #{modalidade.descricao}     
+                </p:column>
+                <p:column headerText="Período" width="70">
+                    #{modalidade.periodo.meses} MESES
+                </p:column>
+                <p:column width="25">
+                    <p:commandButton icon="ui-icon-trash" action="#{ModalidadePropesMB.excluir()}" 
+                                     update="@form :growl">
+                        <f:setPropertyActionListener value="#{modalidade}" target="#{ModalidadePropesMB.modalidade}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+</html>
+

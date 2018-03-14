@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="PROPES/usuarioPropes.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="ADMIN/usuarioProens.xhtml" x="400" y="150" zoom="true"/>
+        <Node id="index.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="PROPES/curso.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="PROPES/arquivo.xhtml" x="150" y="600" zoom="true"/>
+        <Node id="PROPES/movimentacao.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="PROPES/instituicao.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="PROPES/listarProjetos.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="PROPES/projeto.xhtml" x="150" y="750" zoom="true"/>
+        <Node id="login.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="PROPES/relatorio.xhtml" x="400" y="600" zoom="true"/>
+        <Node id="PROPES/modalidade.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="PROPES/evento.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="PROPES/index_propes.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="PROPES/arquivos.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="PROPES/gruposTrabalho.xhtml" x="1150" y="300" zoom="true"/>
+        <Node id="ADMIN/usuarioPropes.xhtml" x="1150" y="150" zoom="true"/>
+        <Node id="header.xhtml" x="150" y="150" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

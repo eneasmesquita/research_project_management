@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="propes_PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto4Anos</class>
+    <class>br.projetos.propes.entities.Fomentador</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto30Meses</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto6Meses1Ano</class>
+    <class>br.projetos.propes.entities.Usuario</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto18Meses</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto42Meses</class>
+    <class>br.projetos.propes.entities.Curso</class>
+    <class>br.projetos.propes.entities.ModalidadeProjeto</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto3Anos</class>
+    <class>br.projetos.propes.entities.EventoAluno</class>
+    <class>br.projetos.propes.entities.InstituicaoConvenio</class>
+    <class>br.projetos.propes.entities.AcompanhamentoProjeto2Anos</class>
+    <class>br.projetos.propes.entities.GrupoTrabalho</class>
+    <class>br.projetos.propes.entities.MovimentacaoProjeto</class>
+    <class>br.projetos.propes.entities.ArquivoModelo</class>
+    <class>br.projetos.propes.entities.EventoSistema</class>
+    <class>br.projetos.propes.entities.TipoUsuario</class>
+    <class>br.projetos.propes.entities.Periodo</class>
+    <class>br.projetos.propes.entities.Projeto</class>
+    <class>br.projetos.propes.entities.IntegrantesGrupo</class>
+    <class>br.projetos.propes.entities.ProReitoria</class>
+    <class>br.projetos.propes.entities.EventoColaborador</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <validation-mode>NONE</validation-mode>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/banco"/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="javax.persistence.jdbc.password" value="******"/>
+    </properties>
+  </persistence-unit>
+</persistence>

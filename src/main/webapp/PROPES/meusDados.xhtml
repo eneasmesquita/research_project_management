@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dlgMeusDados" header="Meus Dados" widgetVar="wgtVarDlgMeusDados"
+              showEffect="fade" hideEffect="fade" resizable="false" width="600" modal="true">
+              <h:form id="formMeusDados" prependId="false">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Curso: " rendered="#{sessionScope.tipo eq '2'}"/>
+                <p:outputLabel value="#{sessionScope.curso}" style="font-weight: bold; font-style: italic" rendered="#{sessionScope.tipo eq '2'}"/>
+            </h:panelGrid>
+            <h:panelGrid columns="4">
+                <p:outputLabel value="Nome: "/>
+                <p:inputText value="#{UsuarioPropesMB.usuario.nome}" 
+                             required="true" requiredMessage="Insira o nome completo do usuario."
+                             style="width: 350px; text-transform: uppercase"/>
+                <p:outputLabel value="Cpf: "/>
+                <p:outputLabel value="#{UsuarioPropesMB.usuario.cpf}" style="font-weight: bold; font-style: italic"/>
+            </h:panelGrid>
+            <h:panelGrid columns="4">
+                <p:outputLabel value="Contato: "/>
+                <p:inputMask mask="(99)9 9999-9999"
+                             required="true"
+                             requiredMessage="Informe um Numero para contactar o novo usuario."
+                             value="#{UsuarioPropesMB.usuario.contato}"/>
+                <p:outputLabel value="E-mail: " />
+                <p:inputText style="width: 250px" 
+                             required="true"
+                             value="#{UsuarioPropesMB.usuario.email}"
+                             validatorMessage="Formato de email inválido!"
+                             requiredMessage="Insira um email válido!">
+                    <f:validateRegex
+                        pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </p:inputText>
+            </h:panelGrid>
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Nova Senha: "/>
+                <p:password feedback="true" goodLabel="Segura!" 
+                            promptLabel="Defina uma senha alfanumérica" 
+                            weakLabel="Fraca!" 
+                            strongLabel="Forte!"
+                            value="#{UsuarioPropesMB.novaSenha}"/>
+                <p:outputLabel value="Deixar em branco caso não queira redefinir a senha! " style="font-size: 9px; font-style: italic "/>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Confirmar Senha: "/>
+                <p:password value="#{UsuarioPropesMB.confSenha}"/>
+            </h:panelGrid>
+            <p:separator/>
+            <center>
+                <p:commandButton value="Alterar Dados" action="#{UsuarioPropesMB.alterar()}" update="@form :growl"/>
+            </center>
+        </h:form>
+    </p:dialog>
+</html>
+

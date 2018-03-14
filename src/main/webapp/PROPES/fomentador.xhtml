@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog header="Nova Fomentador" widgetVar="wgtVarDlgFomentador" 
+              showEffect="fade" hideEffect="fade" resizable="false" width="400" modal="true">
+        <h:form id="formNovoFomentador" prependId="false">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Descrição: "/>
+                <p:inputText value="#{FomentadorPropesMB.fomentador.descricao}" 
+                             required="true" requiredMessage="Insira a descrição do fomentador a ser cadastrado."
+                             style="text-transform: uppercase;"/>
+                <p:commandButton action="#{FomentadorPropesMB.adicionar()}" 
+                                 update="@form :formDtFomentador :growl" value="Adicionar"/>
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <h:form id="formDtFomentador" prependId="false">
+            <p:dataTable id="dtNovaFomentador" value="#{FomentadorPropesMB.fomentadores}" var="fomentador" rowIndexVar="idx"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="10" emptyMessage="Nenhuma Fomentador Encontrado." 
+                         rowStyleClass="#{empty idx or idx mod 2 ne 0 ? 'even-row' : 'odd-row'}">
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Fomentador" filterBy="#{fomentador.descricao}" 
+                          filterMatchMode="contains" filterStyleClass="filtragemColunas">
+                    #{fomentador.descricao}     
+                </p:column>
+                <p:column width="25">
+                    <p:commandButton icon="ui-icon-trash" action="#{FomentadorPropesMB.excluir()}" 
+                                     update="@form :growl">
+                        <f:setPropertyActionListener value="#{fomentador}" target="#{FomentadorPropesMB.fomentador}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+</html>
+

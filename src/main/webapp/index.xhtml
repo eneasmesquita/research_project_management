@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/resources/images/flagUniversidade.ico" 
+                  type="image/x-icon"/>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PROPES</title>
+            </f:facet>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+            <meta http-equiv="Pragma" content="no-cache"/>
+            <meta http-equiv="Expires" content="0"/>
+        </h:head>
+        <h:body style="background-color: #e6e6e6">
+            <ui:include src="header.xhtml"/>
+
+            <h:form>
+
+                <p:toolbar style="font-size: 12px">
+
+                    <f:facet name="right">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Usuário: ENÉAS - 948.289.542-87"/>
+                            <p:commandLink action="#{ViewControladorMB.logout()}">
+                                <p:graphicImage library="images" name="logout.png" title="Sair da Plataforma"/>
+                            </p:commandLink>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:toolbar>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <center>
+
+                    <h:panelGrid columns="3">
+                        <p:commandLink action="PROENS/index_proens.xhtml?faces-redirect=true" ajax="false" disabled="true">
+                            <h:graphicImage name="proens.png" library="images"/>
+                        </p:commandLink>
+                        <p:commandLink action="PROEX/index_proex?faces-redirect=true" ajax="false" disabled="true">
+                            <h:graphicImage name="proex.png" library="images" style="margin-left: 5px; margin-right: 5px"/>
+                        </p:commandLink>
+                        <p:commandLink action="PROPES/index_propes.xhtml?faces-redirect=true" ajax="false">
+                            <h:graphicImage name="propes.png" library="images"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+
+                </center>
+
+            </h:form>
+
+        </h:body>
+    </f:view>
+</html>
+

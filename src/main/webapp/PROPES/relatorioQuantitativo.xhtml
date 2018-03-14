@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:panel id="pnlRelatorioQuantitativo" visible="#{ViewControladorMB.relatorioQuantitativo}" style="width: 55%; background: top;">
+       <h:form prependId="false">
+                <h:panelGrid columns="2" style="float: right">
+                    <p:commandLink>
+                        <p:graphicImage library="images" name="printer.png" height="32" width="32" title="Imprimir/Salva PDF"/>
+                        <p:printer target="fsRelatorioQuantitativo"/>
+                    </p:commandLink>
+                </h:panelGrid>
+            </h:form>
+            <br/>
+            <br/>
+            <p:fieldset id="fsRelatorioQuantitativo" legend="Plataforma Integrada de Projetos de Pesquisa" toggleSpeed="500">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Relatório Quantitativo - "/>
+                    <p:outputLabel value="#{ViewControladorMB.dataAtual}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:00"/>
+                    </p:outputLabel>
+                </h:panelGrid>
+                <br/>
+                <p:outputLabel value="Modalidade dos Projetos de Pesquisa" style="font-weight: bold"/>
+                <br/>
+                <br/>
+                <p:dataList value="#{RelatorioPropesMB.resumoModalidadeProjetos}" var="modalidade" itemType="disc" emptyMessage="Nenhum Registro Encontrado.">
+                    #{modalidade.descricao}: #{modalidade.quantitativo}
+                </p:dataList>
+                <br/>
+                <p:outputLabel value="Convênios dos Projetos de Pesquisa" style="font-weight: bold"/>
+                <br/>
+                <br/>
+                <p:dataList value="#{RelatorioPropesMB.resumoConveniosProjetos}" var="instituicao" itemType="disc" emptyMessage="Nenhum Registro Encontrado.">
+                    #{instituicao.descricao}: #{instituicao.quantitativo}
+                </p:dataList>
+                <br/>
+                <p:outputLabel value="Fomentos dos Projetos de Pesquisa" style="font-weight: bold"/>
+                <br/>
+                <br/>
+                <p:dataList value="#{RelatorioPropesMB.resumoFomentoProjetos}" var="projetoFomento" itemType="disc" emptyMessage="Nenhum Registro Encontrado.">
+                    #{projetoFomento.titulo}: R$ #{projetoFomento.valorFomento}
+                </p:dataList>
+                <br/>
+                <p:outputLabel value="Fomentadores por quantitativo de contribuição" style="font-weight: bold"/>
+                <br/>
+                <br/>
+                <p:dataList value="#{RelatorioPropesMB.resumoFomentadores}" var="fomentador" itemType="disc" emptyMessage="Nenhum Registro Encontrado.">
+                    #{fomentador.descricao}: R$ #{fomentador.quantitativo}
+                </p:dataList>
+                <br/>
+                <p:separator/>
+                <center>
+                    <p:outputLabel value="Pró-Reitoria de Pós-Graduação e Pesquisa - PROPES"/><br/>
+                <p:outputLabel value="Universidade"/><br/>
+                <p:outputLabel value="Endereço da Universidade"/>
+                </center>
+            </p:fieldset>
+    </p:panel>
+</html>
+

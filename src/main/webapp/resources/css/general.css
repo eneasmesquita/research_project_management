@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Sep 3, 2015, 9:37:55 AM
+    Author     : eneas
+*/
+
+body{
+    font-size: 12px;
+}
+
+.filtragemColunas{
+    float: right; 
+    width: 150px !important; 
+    text-transform: uppercase;
+}
+
+.ui-dialog {
+    top: 30px !important;
+}
+
+.ui-datatable .ui-datatable-data .even-row td{
+    background-color: #eff3f7;
+}
+
+.ui-datatable .ui-datatable-data .odd-row td{
+    background-color:white;
+}

@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:panel id="pnlMovimentacoesMeusProjetos" visible="#{ViewControladorMB.movimentacoesMeusProjetos}" style="width: 55%; background: top;">
+        <f:facet name="header">
+            <h:outputLabel value="Nova Movimentação"/>
+            <p:commandLink action="#{ViewControladorMB.exibirMeusProjetos()}" 
+                           update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos" 
+                           style="float: right">
+                <img src="../resources/images/back.png" width="16" height="16" alt="back"/>
+            </p:commandLink>
+        </f:facet>
+        <h:panelGrid columns="3" >
+            <p:outputLabel value="Projeto nº "/>
+            <p:outputLabel value="#{MovimentacaoProjetoPropesMB.projeto}" style="font-size: 14px; font-weight: bold"/>
+            <p:outputLabel value=" - #{MovimentacaoProjetoPropesMB.projetoTitulo}"/>
+        </h:panelGrid>
+        <p:separator/>
+        <h:form id="formMovimentacaoMeusProjetos" prependId="false" enctype="multipart/form-data" acceptcharset="ISO-8859-1">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Movimentação: "/>
+                <p:selectOneMenu value="#{MovimentacaoProjetoPropesMB.evento}" filter="true" filterMatchMode="startsWith" 
+                                 required="true"
+                                 requiredMessage="O campo movimentação está vazio!">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{EventoPropesMB.eventosMovimentacaoMeusProjeto}" var="evento" itemLabel="#{evento.descricao}" itemValue="#{evento.id}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Anexo à Movimentação: "/>
+                <p:fileUpload mode="simple" skinSimple="true" label="Selecionar Arquivo" value="#{MovimentacaoProjetoPropesMB.arquivoUp}" 
+                              disabled="#{EventoPropesMB.eventosMovimentacaoMeusProjeto.size() == 0}"/>
+            </h:panelGrid>
+            <p:spacer/>
+            <center>
+                <p:commandButton value="Adicionar Movimentação" 
+                                 actionListener="#{MovimentacaoProjetoPropesMB.adicionar()}" ajax="false" 
+                                 onclick="PF('blockUI_m').show();" onsuccess="PF('blockUI_m').hide();"
+                                 disabled="#{EventoPropesMB.eventosMovimentacaoMeusProjeto.size() == 0}">
+                    <f:setPropertyActionListener value="#{MovimentacaoProjetoPropesMB.projeto}" target="#{EventoPropesMB.projetoId}"/>
+                </p:commandButton>
+            </center>
+        </h:form>
+        <br/>
+        <h:form id="formDtMovimentacaoMeusProjetos" prependId="false">
+            <p:dataTable value="#{MovimentacaoProjetoPropesMB.movimentacoesProjeto}" var="movimentacao" 
+                         rowIndexVar="idx"
+                         style="font-size: 11px"
+                         emptyMessage="Nenhuma Movimentação Encontrada.">
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Evento">
+                    <p:outputLabel value="#{movimentacao.eventoSistema.descricao}"/>
+                    <p:outputLabel value="#{movimentacao.eventoColaborador.descricao}"/>
+                    <p:outputLabel value="#{movimentacao.eventoAluno.descricao}"/>
+                    <p:commandLink ajax="false" style="float: right" rendered="#{movimentacao.arquivoVinculado != null}">
+                        <f:setPropertyActionListener value="#{movimentacao}" target="#{MovimentacaoProjetoPropesMB.movimentacaoProjeto}"/>
+                        <p:graphicImage library="images" 
+                                        name="download.png" width="20" height="20" 
+                                        title="Baixar Arquivo Modelo"/>
+                        <p:fileDownload value="#{MovimentacaoProjetoPropesMB.anexoPdf}"/>
+                    </p:commandLink>
+                </p:column>
+                <p:column headerText="Data" width="80">
+                    <p:outputLabel value="#{movimentacao.data}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </p:outputLabel>
+                </p:column>
+                <p:column headerText="Responsável">
+                    <p:outputLabel value="#{movimentacao.responsavel.nome}"/>
+                    <p:outputLabel value="SISTEMA" rendered="#{movimentacao.responsavel == null}"/>
+                </p:column>
+            </p:dataTable>
+            <p:blockUI block="pnlMovimentacoesMeusProjetos" widgetVar="bui" blocked="#{MovimentacaoProjetoPropesMB.bloqueioAcaoAluno}">
+                O Projeto ainda não está em execução!
+            </p:blockUI>
+        </h:form>
+    </p:panel>
+
+</html>
+

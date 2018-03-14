@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog header="Novo Grupo Trabalho" widgetVar="wgtVarDlgGrupoTrabalho" showEffect="fade" modal="true"
+              hideEffect="fade" resizable="false" width="800">
+        <h:form id="formNovoGrupoTrabalho" prependId="false">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Nome do Grupo: "/>
+                <p:inputText value="#{GrupoTrabalhoPropesMB.grupoDescricao}" 
+                             required="true" requiredMessage="Insira o nome completo do grupoTrabalho."
+                             style="width: 350px; text-transform: uppercase">
+                    <p:ajax listener="#{GrupoTrabalhoPropesMB.inserirDescricaoGrupo()}"/>
+                </p:inputText>
+                <p:outputLabel value="Coordenador do Grupo: "/>
+                <p:selectOneMenu value="#{GrupoTrabalhoPropesMB.coordenadorGrupo}" 
+                                 filter="true"
+                                 filterMatchMode="startsWith"
+                                 required="true"
+                                 requiredMessage="Informe um coordenador para o grupo.">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{UsuarioPropesMB.professores}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario.id}"/>
+                    <p:ajax listener="#{GrupoTrabalhoPropesMB.addCoordenadorGrupo(e)}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Adicionar Integrante Grupo: "/>
+                <p:selectOneMenu value="#{GrupoTrabalhoPropesMB.integrante}" 
+                                 filter="true"
+                                 filterMatchMode="startsWith"
+                                 required="true"
+                                 requiredMessage="Informe um integrante para o grupo.">
+                    <f:selectItem itemLabel="SELECIONE" itemValue=""/>
+                    <f:selectItems value="#{UsuarioPropesMB.usuarios}" var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario.id}"/>
+                    <p:ajax listener="#{GrupoTrabalhoPropesMB.addIntegrante(e)}" update=":formIntegrantesGrupo :growl"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="formIntegrantesGrupo" prependId="false">
+            <p:dataTable id="dtIntegrantesGrupo" 
+                         value="#{GrupoTrabalhoPropesMB.integrantesGrupo}" 
+                         var="ig" rowIndexVar="index" 
+                         emptyMessage="Novo Grupo vazio.">
+                <f:facet name="header">
+                    Integrantes
+                </f:facet>
+                <p:column width="10">
+                    #{index+1}
+                </p:column>
+                <p:column headerText="Nome" width="150">
+                    #{ig.nome}
+                </p:column>
+                <p:column headerText="CPF" width="35">
+                    #{ig.cpf}
+                </p:column>
+                <p:column width="10">
+                    <p:commandButton icon="ui-icon-closethick" action="#{GrupoTrabalhoPropesMB.removeIntegrante(ig)}" update="@form"/>
+                </p:column>
+            </p:dataTable>
+            <p:separator/>
+            <center>
+                <p:commandButton value="Adicionar" action="#{GrupoTrabalhoPropesMB.adicionar()}" 
+                                 update="@form :formDtNovoGrupoTrabalho :formNovoGrupoTrabalho :growl"/>
+            </center>
+        </h:form>
+        <br/>
+        <h:form id="formDtNovoGrupoTrabalho" prependId="false">
+            <p:dataTable id="dtNovoGrupoTrabalho" value="#{GrupoTrabalhoPropesMB.gruposTrabalho}" var="grupoTrabalho" rowIndexVar="idx"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="3" emptyMessage="Nenhum Grupo de Trabalho Encontrado.">
+                <p:column width="15">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Grupo" filterBy="#{grupoTrabalho.descricao}" filterMatchMode="startsWith" filterStyle="width: 250px">
+                    #{grupoTrabalho.descricao}
+                </p:column>
+                <p:column headerText="Coordenador">
+                    #{grupoTrabalho.coordenador.nome}
+                </p:column>
+                <p:rowExpansion>
+                    <p:dataList value="#{grupoTrabalho.integrantesGrupoCollection}" var="integrante" rowIndexVar="idx"
+                                emptyMessage="Nenhum Integrante Encontrado." style="font-size: 10px">
+                        <f:facet name="header">
+                            Integrantes do Grupo
+                        </f:facet>
+                        <p:column>
+                            #{idx+1}
+                        </p:column>
+                        <p:column>
+                            #{integrante.usuario.nome}
+                        </p:column>
+                    </p:dataList>
+                </p:rowExpansion>
+                <p:column width="25">
+                    <p:commandButton icon="ui-icon-trash" action="#{GrupoTrabalhoPropesMB.excluir()}" update=":@form :growl">
+                        <f:setPropertyActionListener value="#{grupoTrabalho}" target="#{GrupoTrabalhoPropesMB.grupoTrabalho}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+</html>
+

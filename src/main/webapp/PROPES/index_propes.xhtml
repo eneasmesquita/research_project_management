@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+
+        <h:head>
+            <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/resources/images/flagUniversidade.ico" type="image/x-icon"/>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PROPES</title>
+            </f:facet>
+            <h:outputStylesheet name="general.css" library="css"/>
+            <h:outputScript library="javascript" name="countdown-sessao.js" target="head"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+            <meta http-equiv="Pragma" content="no-cache"/>
+            <meta http-equiv="Expires" content="0"/>
+        </h:head>
+
+        <h:body onload="contagem()">
+
+            <p:growl id="growl" life="5000"/>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="west" size="220">
+
+                    <h:form id="formMenu" prependId="false">
+
+                        <p:menu style="width: 210px">
+                            <p:submenu label="Gerenciamento de Projetos" rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}">
+                                <p:menuitem value="Adicionar Curso" onclick="PF('wgtVarDlgCurso').show();"/>
+                                <p:menuitem value="Adicionar Evento Movimentação" onclick="PF('wgtVarDlgEvento').show();"/>
+                                <p:menuitem value="Adicionar Fomentador" onclick="PF('wgtVarDlgFomentador').show();"/>
+                                <p:menuitem value="Adicionar Instituição Conveniada" onclick="PF('wgtVarDlgInstituicao').show();"/>
+                                <p:menuitem value="Adicionar Modalidade do Projeto" onclick="PF('wgtVarDlgModalidade').show();"/>
+                            </p:submenu>
+                            <p:submenu label="Projetos de Pesquisa">
+                                <p:menuitem value="Arquivos" action="#{ViewControladorMB.exibirArquivos()}" 
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador"/>
+                                <p:menuitem value="Listar Projetos" action="#{ViewControladorMB.exibirListarProjetos()}" 
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador"/>
+                                <p:menuitem value="Meu(s) Projeto(s)" action="#{ViewControladorMB.exibirMeusProjetos()}" 
+                                            rendered="#{sessionScope.tipo eq '2'}"
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador"/>
+                                <p:menuitem id="mi_projeto" value="Novo Projeto" action="#{ViewControladorMB.exibirProjetos()}" 
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador" 
+                                            rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '2'}"/>
+                            </p:submenu>
+                            <p:submenu label="Relatórios" rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}">
+                                <p:menuitem value="Relatório Quantitativo" action="#{ViewControladorMB.exibirRelatorioQuantitativo()}" 
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador"/>
+                                <p:menuitem value="Relação de Projetos por Aluno/Pesquisador" action="#{ViewControladorMB.exibirRelacaoProjetoPesquisador()}" 
+                                            update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos :pnlRelatorioQuantitativo :pnlRelacaoProjetoPesquisador"/>
+                            </p:submenu>
+                            <p:submenu label="Administração" rendered="#{sessionScope.tipo eq '1'}">
+                                <p:menuitem value="Gerenciar Usuário" action="#{UsuarioPropesMB.prepararFormulario()}" onclick="PF('wgtVarDlgUsuario').show();" update=":formNovoUsuario :formDtNovoUsuario"/>
+                                <p:menuitem value="Gerenciar Grupos Trabalho" actionListener="#{GrupoTrabalhoPropesMB.preparaFormGrupoTrabalho(e)}" 
+                                            onclick="PF('wgtVarDlgGrupoTrabalho').show();" update=":formNovoGrupoTrabalho :formDtNovoGrupoTrabalho :formIntegrantesGrupo"/>
+                            </p:submenu>
+                            <p:submenu label="Área do Usuário">
+                                <p:menuitem value="Meus Dados" onclick="PF('wgtVarDlgMeusDados').show();" update=":formMeusDados">
+                                    <f:setPropertyActionListener value="#{sessionScope.usuario_logado}" target="#{UsuarioPropesMB.usuario}"/>
+                                </p:menuitem>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center" style="border: hidden">
+
+                    <p:toolbar id="tbInformativa">
+                        <f:facet name="left">
+                            <p:graphicImage name="propes.png" library="images" style="margin-left: 1em; margin-top: 6px"/>
+                        </f:facet>
+
+                        <f:facet name="right">
+                            <p:panelGrid columns="4">
+                                <p:column rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}">
+                                    <p:graphicImage id="notification" name="notification.png" library="images" height="40" width="40" rendered="#{empty RelatorioPropesMB.novosProjetosAdded}"/>
+                                    <p:graphicImage id="notification-alert" name="notification-alert.png" library="images" height="40" width="40" rendered="#{!empty RelatorioPropesMB.novosProjetosAdded}"/>
+                                    <p:overlayPanel for="notification-alert" hideEffect="fade" style="width: 400px; font-weight: normal">
+                                        <center><strong>Novos projetos cadastrados para análise</strong></center>
+                                        <br/>
+                                        <p:dataTable value="#{RelatorioPropesMB.novosProjetosAdded}" var="novoprojeto">
+                                            <p:column>
+                                                <p:graphicImage name="alert.png" library="images" height="16" width="16"/>
+                                                <p:outputLabel value=" Nº #{novoprojeto.id} - #{novoprojeto.titulo}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:overlayPanel>
+                                </p:column>
+                                <p:column rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}"> 
+                                    <p:graphicImage id="late" name="clock.png" library="images" height="40" width="40"/>
+                                    <!--<p:graphicImage id="late-alert" name="clock-alert.png" library="images" height="40" width="40"/>-->
+                                    <p:overlayPanel for="late" hideEffect="fade" style="background: top">
+                                        Olá!
+                                    </p:overlayPanel>
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="Usuário: "/>
+                                    <p:outputLabel value="#{sessionScope.nome_usuario} " style="font-weight: normal"/>
+                                    <br/>
+                                    <p:outputLabel value="Perfil: "/>
+                                    <p:outputLabel value="#{sessionScope.perfil}" style="font-weight: normal"/>
+                                    <br/>
+                                    <p:outputLabel value="Sessão: "/>
+                                    <p:outputLabel id="countDownSessao" style="font-weight: normal"/>
+                                </p:column>
+                                <p:column>
+                                    <p:commandLink action="#{LoginController.logout()}">
+                                        <p:graphicImage library="images" name="logout.png" title="Sair da Plataforma" height="40" width="40"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:toolbar>
+
+                    <ui:include id="uiListarProjetos" src="listarProjetos.xhtml"/>
+                    <ui:include id="uiMeusProjetos" src="listarMeusProjetos.xhtml"/>
+                    <ui:include id="uiArquivos" src="arquivos.xhtml"/>
+                    <ui:include id="uiProjeto" src="projeto.xhtml"/>
+                    <ui:include id="uiMovimentacao" src="movimentacao.xhtml"/>
+                    <ui:include id="uiMovimentacaoMeusProjetos" src="movimentacaoMeusProjetos.xhtml"/>
+                    <ui:include id="uiRelatorioQuantitativo" src="relatorioQuantitativo.xhtml"/>
+                    <ui:include id="uiRelatorioProjetoPesquisador" src="relacaoProjetosPesquisador.xhtml"/>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south">
+                    <center>
+                        Para relatar um erro, sugerir melhorias ou modificações: 
+                        <a href="mailto:responsavel@sistema.edu.br?subject=E-MAIL DOS USUÁRIOS DO ProjetosUniversidade" style="color: #3399ff">responsavel@universidade.edu.br</a>
+                    </center>
+                </p:layoutUnit>
+
+                <ui:include id="uiBlockUI_p" src="blockUI_p.xhtml"/>
+                <ui:include id="uiBlockUI_m" src="blockUI_m.xhtml"/>
+                <ui:include id="uiModalidade" src="modalidade.xhtml"/>
+                <ui:include id="uiCursos" src="curso.xhtml"/>
+                <ui:include id="uiEvento" src="evento.xhtml"/>
+                <ui:include id="uiMeusDados" src="meusDados.xhtml"/>
+                <ui:include id="uiFomentadores" src="fomentador.xhtml"/>
+                <ui:include id="uiUsuario" src="usuarioPropes.xhtml"/>
+                <ui:include id="uiGrupoTrabalho" src="gruposTrabalho.xhtml"/>
+                <ui:include id="uiInstituicoes" src="instituicao.xhtml"/>
+
+            </p:layout>
+
+            
+
+        </h:body>
+    </f:view>
+</html>
+

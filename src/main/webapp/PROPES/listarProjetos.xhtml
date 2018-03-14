@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:panel id="pnlListarProjetos" visible="#{ViewControladorMB.listarProjetos}" style="font-size: 11px; background: top; border: hidden">
+        <h:form id="formProjetos" prependId="false">
+            <p:dataTable id="dtProjetos" value="#{ProjetoPropesMB.projetos}" var="projeto" 
+                         emptyMessage="Nenhum Projeto Encontrado." rowIndexVar="row" 
+                         paginator="true" paginatorPosition="top" rows="5">
+                   
+                <f:facet name="header">
+                    Projetos
+                </f:facet>
+                <p:column width="15">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="Nº" filterBy="#{projeto.id}" filterMatchMode="startsWith" width="35" filterStyle="width: 30px">
+                    #{projeto.id}
+                </p:column>
+                <p:column headerText="Título" style="text-align: justify">
+                    #{projeto.titulo}
+                </p:column>
+                <p:column headerText="Responsável" filterBy="#{projeto.responsavel.cpf}" filterMatchMode="startsWith" filterStyle="width: 80px">
+                    #{projeto.responsavel.nome} - #{projeto.responsavel.cpf}
+                </p:column>
+                <p:column headerText="Modalidade">
+                    #{projeto.modalidade.descricao}
+                </p:column>
+                <p:column headerText="Curso">
+                    #{projeto.curso.descricao}
+                </p:column>
+                <p:column headerText="Convênio">
+                    <p:outputLabel value="#{projeto.instituicaoConvenio.descricao}" rendered="#{projeto.instituicaoConvenio.descricao != null}"/>
+                    <p:outputLabel value="-----" style="font-weight: bold" rendered="#{projeto.instituicaoConvenio.descricao eq null}"/>
+                </p:column>
+                <p:column headerText="Resumo" width="250" style="text-align: justify">
+                    #{projeto.resumo}
+                </p:column>
+                <p:column headerText="Baixar" width="40">
+                    <p:commandLink ajax="false">
+                        <f:setPropertyActionListener value="#{projeto}" target="#{ProjetoPropesMB.projeto}"/>
+                        <p:graphicImage library="images" 
+                                        name="download.png" width="32" height="32" 
+                                        title="Baixar Anexo da Movimentação"/>
+                        <p:fileDownload value="#{ProjetoPropesMB.projetoPdf}"/>
+                    </p:commandLink>
+                </p:column>
+                <p:rowExpansion>
+                    <p:commandLink action="#{ViewControladorMB.exibirMovimentacoes()}" 
+                                   rendered="#{sessionScope.tipo eq '1' or sessionScope.tipo eq '3'}" 
+                                   update=":pnlListarProjetos :pnlArquivos :pnlProjetos :pnlMovimentacoes :pnlMeusProjetos :pnlMovimentacoesMeusProjetos">
+                        <p:graphicImage library="images" name="plus.png" width="23" height="23" style="float: right" title="Adicionar Movimentação"/>
+                        <f:setPropertyActionListener value="#{projeto.id}" target="#{MovimentacaoProjetoPropesMB.projeto}"/>
+                        <f:setPropertyActionListener value="#{projeto.titulo}" target="#{MovimentacaoProjetoPropesMB.projetoTitulo}"/>
+                        <f:setPropertyActionListener value="#{projeto.id}" target="#{EventoPropesMB.projetoId}" />
+                    </p:commandLink>
+                    <p:dataTable value="#{projeto.movimentacaoProjetoCollection}" var="movimentacao" 
+                                 rowIndexVar="idx"
+                                 emptyMessage="Nenhuma Movimentação Encontrada.">
+                        <f:facet name="header">
+                            Movimentações do Projeto
+                        </f:facet>
+                        <p:column width="20">
+                            #{idx+1}
+                        </p:column>
+                        <p:column headerText="Evento">
+                            <p:outputLabel value="#{movimentacao.eventoColaborador.descricao}"/>
+                            <p:outputLabel value="#{movimentacao.eventoSistema.descricao}"/>
+                            <p:outputLabel value="#{movimentacao.eventoAluno.descricao}"/>
+                            <p:commandLink ajax="false" style="float: right" rendered="#{movimentacao.arquivoVinculado != null}">
+                                <f:setPropertyActionListener value="#{movimentacao}" target="#{MovimentacaoProjetoPropesMB.movimentacaoProjeto}"/>
+                                <p:graphicImage library="images" 
+                                                name="download.png" width="20" height="20" 
+                                                title="Baixar Arquivo Modelo"/>
+                                <p:fileDownload value="#{MovimentacaoProjetoPropesMB.anexoPdf}"/>
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Data" width="80">
+                            <p:outputLabel value="#{movimentacao.data}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Responsável">
+                            <p:outputLabel value="#{movimentacao.responsavel.nome}"/>
+                            <p:outputLabel value="SISTEMA" rendered="#{movimentacao.responsavel == null}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:rowExpansion>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+
+</html>
+

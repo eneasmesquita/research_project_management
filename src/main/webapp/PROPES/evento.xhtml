@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <p:dialog id="dlgEvento" header="Novo Evento" widgetVar="wgtVarDlgEvento"
+              showEffect="fade" hideEffect="fade" resizable="false" width="600" modal="true">
+        <h:form id="formNovoEvento" prependId="false">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="Descrição: "/>
+                <p:inputText required="true" requiredMessage="Insira a descrição do evento!"
+                             value="#{EventoPropesMB.evento.descricao}" style="text-transform: uppercase; width: 350px"/>
+            </h:panelGrid>
+            <p:separator/>
+            <center>
+                <p:commandButton value="Adicionar" actionListener="#{EventoPropesMB.adicionar()}" update="@form :formDtEvento :growl"/>
+            </center>
+        </h:form>
+        <br/>
+        <h:form id="formDtEvento" prependId="false">
+            <p:dataTable id="dtNovoEvento" value="#{EventoPropesMB.eventos}" var="evento" rowIndexVar="idx"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="8" emptyMessage="Nenhum Evento Encontrado.">
+                <p:column width="20">
+                    #{idx+1}
+                </p:column>
+                <p:column headerText="Evento" filterBy="#{evento.descricao}" 
+                          filterMatchMode="contains" filterStyleClass="filtragemColunas">
+                    #{evento.descricao}
+                </p:column>
+                <p:column width="25">
+                    <p:commandButton icon="ui-icon-trash" action="#{EventoPropesMB.excluir()}" 
+                                     update="@form :growl">
+                        <f:setPropertyActionListener value="#{evento}" target="#{EventoPropesMB.evento}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:dialog>
+</html>
+
