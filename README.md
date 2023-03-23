@@ -6,6 +6,8 @@ The Research Project Management System was developed to efficiently automate the
 **Features**
 
 * CRUD Projects
+* CRUD Users
+* CRUD Research Groups
 * File Sharing
 * Progress Monitoring
 * Deadline alert notification by system notification and email
