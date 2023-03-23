@@ -1,4 +1,4 @@
-# Research Project Management Application</strong></h1>
+# Research Project Management Application
 
 The Research Project Management Application was developed to efficiently automate the management of research projects for specialization, master's, and doctoral programs between researchers and advisors.
 
