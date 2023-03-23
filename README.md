@@ -16,8 +16,7 @@ The Research Project Management Application was developed to efficiently automat
 **Technologies**
 
 * Java
-* JSF - PrimeFaces
-* Netbeans
+* PrimeFaces
 * PostgreSQL
 * Tomcat
 
